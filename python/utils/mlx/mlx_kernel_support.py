@@ -28,7 +28,7 @@ except ImportError:
     class mx:
         class array: pass
 
-from .logger import get_logger
+from ..logging.logger import get_logger
 
 logger = get_logger(__name__)
 
