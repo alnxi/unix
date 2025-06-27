@@ -481,7 +481,6 @@ from ..performance.experiment_logger import ExperimentLogger
 
 
 from ..performance.performance_tracker import PerformanceTracker
-        return "\n".join(report)
 
 
 class IndentedRichHandler(RichHandler):
