@@ -478,7 +478,6 @@ class StructuredJSONHandler(logging.Handler):
         except Exception:
             self.handleError(record)
 
-
 class IndentedRichHandler(RichHandler):
     """Custom Rich handler that supports indentation and progress coordination."""
 
