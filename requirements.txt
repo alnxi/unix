@@ -1,0 +1,19 @@
+# Core dependencies
+torch
+torchvision
+torchaudio
+numpy
+rich
+matplotlib
+seaborn
+psutil
+pyyaml
+omegaconf
+scipy
+hydra-core
+datasets
+cryptography
+wandb
+tensorboard
+memory-profiler
+line-profiler
