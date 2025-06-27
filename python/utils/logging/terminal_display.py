@@ -1,8 +1,8 @@
 """
-Enhanced Terminal Display Utilities for UnifiedTransformer
+Enhanced Terminal Display Utilities.
 
-This module provides clean, anti-flickering progress bars and enhanced terminal output
-based on the patterns from the transfusion project. Features include:
+This module provides clean, anti-flickering progress bars and enhanced terminal output.
+Features include:
 
 - Anti-flickering progress bars with controlled refresh rates
 - Coordinated logging and progress display

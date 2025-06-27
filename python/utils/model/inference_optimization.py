@@ -1,5 +1,5 @@
 """
-Advanced Inference Optimization for UnifiedTransformer
+Advanced Inference Optimization
 
 This module provides comprehensive inference optimization features including:
 - Sequence bucketing for optimal batch processing

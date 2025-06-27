@@ -1,5 +1,5 @@
 """
-Security and Privacy Utilities for UnifiedTransformer
+Security and Privacy Utilities
 
 This module provides comprehensive security utilities including data encryption,
 privacy-preserving techniques, and security best practices for machine learning workflows.

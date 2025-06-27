@@ -1,5 +1,5 @@
 """
-Unified Dataset Loading Interface for UnifiedTransformer
+Unified Dataset Loading Interface
 
 This module provides a unified interface for loading and processing datasets
 across different modalities (text, vision, audio) with automatic format detection,

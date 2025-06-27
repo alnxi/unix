@@ -1,5 +1,5 @@
 """
-UnifiedTransformer Advanced MLX Utilities
+Advanced MLX Utilities
 
 This module provides comprehensive MLX-specific utilities for Apple Silicon optimization,
 including advanced memory management, performance optimization, and seamless MLX-PyTorch interoperability.
@@ -1319,14 +1319,11 @@ class MLXModelUtils:
 
     @staticmethod
     def convert_pytorch_to_mlx(pytorch_model: 'nn.Module') -> 'nn.Module':
-        """Convert PyTorch UnifiedTransformer to MLX-native model."""
+        """Convert a PyTorch model to an MLX-native model."""
         if not MLX_AVAILABLE:
             raise ImportError("MLX is required for model conversion")
 
-        logger.info("Converting PyTorch UnifiedTransformer to MLX-native model...")
-
-        # Import the merged UnifiedTransformer
-        from ..core.unified_transformer import UnifiedTransformer
+        logger.info("Converting PyTorch model to MLX-native model...")
 
         # Extract configuration from PyTorch model
         config = MLXModelUtils._extract_model_config(pytorch_model)
@@ -1335,8 +1332,8 @@ class MLXModelUtils:
         config['backend'] = 'mlx'
         config['enable_mlx_optimization'] = True
 
-        # Create MLX model with same configuration
-        mlx_model = UnifiedTransformer(config)
+        # Create MLX model with same configuration using the PyTorch model class
+        mlx_model = type(pytorch_model)(config)
 
         # Verify the model was created with MLX backend
         if not mlx_model.has_mlx_parameters():
@@ -1411,7 +1408,7 @@ class MLXModelUtils:
 
             # Update MLX model parameters
             if mlx_params:
-                # For UnifiedTransformer with MLX backend, we need to update the parameters properly
+                # For models with an MLX backend, we need to update the parameters properly
                 if hasattr(mlx_model, 'update'):
                     mlx_model.update(mlx_params)
                     logger.info(f"✅ Transferred {converted_count}/{len(pytorch_state_dict)} parameters to MLX model")

@@ -1,5 +1,5 @@
 """
-UnifiedTransformer Configuration Utilities
+Configuration Utilities
 
 This module provides utilities for configuration management, including
 YAML/Hydra integration, environment variable handling, and configuration validation.
@@ -327,7 +327,7 @@ class DefaultConfigs:
                 "logging_steps": 100
             },
             "data": {
-                "dataset_name": "wikitext-103",
+                "dataset_name": "default_dataset",
                 "max_length": 1024,
                 "preprocessing_num_workers": 4
             },
@@ -341,7 +341,7 @@ class DefaultConfigs:
                 "log_level": "INFO",
                 "use_wandb": False,
                 "use_tensorboard": True,
-                "experiment_name": "unified_transformer"
+                "experiment_name": "default_experiment"
             }
         }
         
@@ -624,7 +624,7 @@ def create_training_config_from_dict(config_dict: Dict[str, Any]) -> 'TrainingEx
         target_performance_improvement=0.175,
         memory_limit_gb=hardware_config.get('memory_limit_gb', 22),
 
-        output_dir=output_config.get('log_dir', 'logs/unified'),
-        checkpoint_dir=output_config.get('checkpoint_dir', 'models/checkpoints/unified'),
-        log_dir=output_config.get('log_dir', 'logs/unified'),
+        output_dir=output_config.get('log_dir', 'logs/app'),
+        checkpoint_dir=output_config.get('checkpoint_dir', 'models/checkpoints/app'),
+        log_dir=output_config.get('log_dir', 'logs/app'),
     )

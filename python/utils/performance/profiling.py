@@ -1,7 +1,7 @@
 """
-UnifiedTransformer Advanced Performance Profiling Module
+Advanced Performance Profiling Module
 
-This module provides comprehensive profiling utilities for the UnifiedTransformer project,
+This module provides comprehensive profiling utilities for machine learning projects,
 specifically optimized for Apple Silicon M4 Pro with 24GB RAM constraint monitoring.
 
 Enhanced Features:
@@ -365,7 +365,7 @@ class PerformanceProfiler:
         filepath.parent.mkdir(parents=True, exist_ok=True)
         
         with open(filepath, 'w') as f:
-            f.write("UnifiedTransformer Performance Profile Report\n")
+            f.write("Performance Profile Report\n")
             f.write("=" * 50 + "\n\n")
             
             # Overall statistics
@@ -810,7 +810,7 @@ def generate_performance_dashboard() -> str:
     recent_bottlenecks = detector.analyze_bottlenecks()
 
     dashboard = [
-        "UnifiedTransformer Performance Dashboard",
+        "Performance Dashboard",
         "=" * 50,
         "",
         "Memory Status:",

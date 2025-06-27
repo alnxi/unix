@@ -1,5 +1,5 @@
 """
-Text Preprocessing Utilities for UnifiedTransformer
+Text Preprocessing Utilities
 
 This module provides comprehensive text preprocessing pipelines with support for
 various text processing tasks including tokenization, normalization, and feature extraction.
