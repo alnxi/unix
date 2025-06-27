@@ -1,6 +1,6 @@
-# UnifiedTransformer Utilities
+# Utility Modules
 
-This directory contains comprehensive utility modules for the UnifiedTransformer project, designed to support the development of an advanced multimodal AI system optimized for Apple Silicon.
+This directory contains comprehensive utility modules designed to support the development of advanced multimodal AI systems optimized for Apple Silicon.
 
 ## Overview
 
@@ -187,7 +187,7 @@ from src.utils import (
 
 # Setup logging
 logger = get_logger(__name__)
-logger.info("Starting UnifiedTransformer")
+logger.info("Starting application")
 
 # Setup memory monitoring
 monitor = get_memory_monitor()
@@ -218,7 +218,7 @@ run_all_tests()
 
 ## Architecture Integration
 
-The utilities are designed to integrate seamlessly with the UnifiedTransformer architecture:
+The utilities are designed to integrate seamlessly with the model architecture:
 
 - **Core Module**: Configuration and base classes use config utilities
 - **Training Module**: Uses profiling, visualization, and logging
@@ -257,4 +257,4 @@ When adding new utilities:
 
 ## License
 
-Part of the UnifiedTransformer project. See main project LICENSE for details.
+Part of the project. See the main LICENSE for details.

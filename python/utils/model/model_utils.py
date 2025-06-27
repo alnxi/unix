@@ -1,8 +1,8 @@
 """
-UnifiedTransformer Model Utilities
+Model Utilities
 
 This module provides utilities for model analysis, debugging, and optimization
-specifically designed for the UnifiedTransformer architecture.
+specifically designed for transformer-style architectures.
 
 Features:
 - Model parameter analysis and counting
@@ -308,7 +308,7 @@ class ModelAnalyzer:
         health_report = self.check_model_health()
         
         report_lines = [
-            "UnifiedTransformer Model Analysis Report",
+            "Model Analysis Report",
             "=" * 50,
             "",
             "Parameter Analysis:",

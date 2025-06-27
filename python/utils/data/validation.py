@@ -1,5 +1,5 @@
 """
-Data Validation Utilities for UnifiedTransformer
+Data Validation Utilities
 
 This module provides comprehensive data validation and integrity checking
 for datasets and data pipelines with support for various data formats

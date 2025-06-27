@@ -1,7 +1,7 @@
 """
-UnifiedTransformer Visualization Utilities
+Visualization Utilities
 
-This module provides comprehensive visualization tools for the UnifiedTransformer project,
+This module provides comprehensive visualization tools for machine learning projects,
 including training progress monitoring, model analysis, and performance visualization.
 
 Features:
@@ -102,8 +102,8 @@ sns.set_palette("husl")
 class TrainingVisualizer:
     """Comprehensive training visualization and monitoring."""
     
-    def __init__(self, 
-                 experiment_name: str = "unified_transformer",
+    def __init__(self,
+                 experiment_name: str = "default_experiment",
                  log_dir: str = "logs/training",
                  use_wandb: bool = False,
                  use_tensorboard: bool = True):
@@ -354,7 +354,7 @@ class TrainingVisualizer:
             return
             
         # Header
-        header_text = Text(f"UnifiedTransformer Training Dashboard - {self.experiment_name}", 
+        header_text = Text(f"Training Dashboard - {self.experiment_name}",
                           style="bold blue")
         layout["header"].update(Panel(header_text, title="Status"))
         
@@ -400,7 +400,7 @@ class TrainingVisualizer:
             filepath = self.log_dir / f"{self.experiment_name}_summary.txt"
             
         with open(filepath, 'w') as f:
-            f.write(f"UnifiedTransformer Training Summary: {self.experiment_name}\n")
+            f.write(f"Training Summary: {self.experiment_name}\n")
             f.write("=" * 60 + "\n\n")
             
             f.write(f"Total steps: {self.step_count}\n")
@@ -447,7 +447,7 @@ class TrainingVisualizer:
 _global_visualizer: Optional[TrainingVisualizer] = None
 
 
-def get_visualizer(experiment_name: str = "unified_transformer") -> "TrainingVisualizer":
+def get_visualizer(experiment_name: str = "default_experiment") -> "TrainingVisualizer":
     """Get global visualizer instance."""
     global _global_visualizer
     if _global_visualizer is None:

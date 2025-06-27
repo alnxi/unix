@@ -1,5 +1,5 @@
 """
-Experiment Tracking Utilities for UnifiedTransformer
+Experiment Tracking Utilities
 
 Provides utilities for consistent experiment naming and tracking.
 """

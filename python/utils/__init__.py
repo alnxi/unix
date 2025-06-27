@@ -1,7 +1,7 @@
 """
-UnifiedTransformer Utilities Module
+Utility Module
 
-This module provides comprehensive utilities for the UnifiedTransformer project:
+This module provides comprehensive utilities for machine learning projects:
 - Enhanced logging with Rich console output and MLX integration
 - Performance profiling and memory monitoring for 24GB constraint
 - Training visualization and progress monitoring

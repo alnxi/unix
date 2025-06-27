@@ -1,7 +1,7 @@
 """
-UnifiedTransformer Advanced Logging Module
+Advanced Logging Module
 
-This module provides a comprehensive logging solution for the UnifiedTransformer project.
+This module provides a comprehensive logging solution for machine learning projects.
 It includes:
 - Multiple log levels (DEBUG, INFO, VERBOSE, WARNING, ERROR, CRITICAL)
 - Console and file logging with configurable formats
@@ -108,8 +108,8 @@ _EXPERIMENT_LOGGERS = {}
 _STRUCTURED_LOGS = deque(maxlen=10000)
 
 
-class UnifiedTransformerLogger(logging.Logger):
-    """Custom logger class for UnifiedTransformer with additional log levels and features."""
+class ApplicationLogger(logging.Logger):
+    """Custom logger class with additional log levels and features."""
 
     def verbose(self, msg: str, *args, **kwargs) -> None:
         """Log at VERBOSE level (between DEBUG and INFO)."""
@@ -481,7 +481,6 @@ from ..performance.experiment_logger import ExperimentLogger
 
 
 from ..performance.performance_tracker import PerformanceTracker
-        return "\n".join(report)
 
 
 class IndentedRichHandler(RichHandler):
@@ -547,7 +546,7 @@ def _get_default_config() -> Dict[str, Any]:
         "file_format": "%(asctime)s [%(levelname)8s] %(name)s (%(filename)s:%(lineno)d): %(message)s",
         "use_colors": True,
         "log_dir": "output/logs",
-        "log_file": "transfusion.log",
+        "log_file": "application.log",
         "max_file_size_mb": 10,
         "backup_count": 5,
         "capture_warnings": True,
@@ -612,7 +611,7 @@ class LoggingManager:
         self.config = _get_default_config()
 
         # Register our custom logger class
-        logging.setLoggerClass(UnifiedTransformerLogger)
+        logging.setLoggerClass(ApplicationLogger)
 
         # Configure root logger
         level = _get_log_level(self.config.get("level", "INFO"))
@@ -639,7 +638,7 @@ class LoggingManager:
             self.root_console = Console(theme=theme, highlight=True, force_terminal=True)
 
             if not self.rich_banner_printed and multiprocessing.current_process().name == "MainProcess":
-                self.root_console.print("[bold green]UnifiedTransformer Logger initialized with Rich console output[/]")
+                self.root_console.print("[bold green]Logger initialized with Rich console output[/]")
                 self.rich_banner_printed = True
 
             console_level = _get_log_level(self.config.get("console_level", "INFO"))
@@ -655,7 +654,7 @@ class LoggingManager:
             root_logger.addHandler(rich_hdl)
         else:
             if not self.rich_banner_printed and multiprocessing.current_process().name == "MainProcess":
-                print("UnifiedTransformer Logger initialized with standard console output")
+                print("Logger initialized with standard console output")
                 self.rich_banner_printed = True
 
             console_handler = logging.StreamHandler(sys.stdout)
@@ -675,7 +674,7 @@ class LoggingManager:
             log_dir = Path(self.config.get("log_dir", "output/logs"))
             log_dir.mkdir(parents=True, exist_ok=True)
 
-            log_file = self.config.get("log_file", "unified_transformer.log")
+            log_file = self.config.get("log_file", "application.log")
             log_path = log_dir / log_file
 
             file_level = _get_log_level(self.config.get("file_level", "DEBUG"))
@@ -705,15 +704,15 @@ class LoggingManager:
 _log_manager = LoggingManager()
 
 
-def get_logger(name: Optional[str] = None) -> "UnifiedTransformerLogger":
+def get_logger(name: Optional[str] = None) -> "ApplicationLogger":
     """Get a logger, initializing the system if needed."""
     if name is None:
         # Dynamic name resolution from caller frame
         frame = inspect.currentframe().f_back
-        name = inspect.getmodule(frame).__name__ if frame else "unified_transformer"
+        name = inspect.getmodule(frame).__name__ if frame else "application"
 
     _log_manager.ensure_initialised()
-    return cast(UnifiedTransformerLogger, logging.getLogger(name))
+    return cast(ApplicationLogger, logging.getLogger(name))
 
 
 @contextmanager
@@ -1019,7 +1018,7 @@ def setup_distributed_logging(rank: int, world_size: int, log_dir: str = "output
 
     # Configure logging with rank-specific settings
     config = _get_default_config()
-    config["log_file"] = f"unified_transformer_rank_{rank}.log"
+    config["log_file"] = f"application_rank_{rank}.log"
     config["log_dir"] = str(rank_log_dir)
 
     # Only rank 0 should log to console in distributed setting
