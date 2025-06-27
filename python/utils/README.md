@@ -209,11 +209,10 @@ visualizer = get_visualizer("my_experiment")
 
 ## Testing
 
-Run the test suite to verify all utilities work correctly:
+Run the test suite using `pytest` from the repository root:
 
-```python
-from src.utils.test_utils import run_all_tests
-run_all_tests()
+```bash
+pytest
 ```
 
 ## Architecture Integration
