@@ -39,6 +39,8 @@ import torch
 import numpy as np
 import psutil
 import platform
+from ..performance.experiment_logger import ExperimentLogger
+from ..performance.performance_tracker import PerformanceTracker
 
 # Import Rich for beautiful console output
 try:
@@ -475,13 +477,6 @@ class StructuredJSONHandler(logging.Handler):
                     f.write(json_data + '\n')
         except Exception:
             self.handleError(record)
-
-
-from ..performance.experiment_logger import ExperimentLogger
-
-
-from ..performance.performance_tracker import PerformanceTracker
-
 
 class IndentedRichHandler(RichHandler):
     """Custom Rich handler that supports indentation and progress coordination."""
