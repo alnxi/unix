@@ -17,7 +17,9 @@ if 'torch' not in sys.modules:
     )
     sys.modules['torch'] = torch_stub
 
-if 'numpy' not in sys.modules:
+try:
+    import numpy  # noqa: F401
+except Exception:
     sys.modules['numpy'] = types.ModuleType('numpy')
 
 if 'psutil' not in sys.modules:
@@ -59,6 +61,30 @@ if 'python.utils.data.quality' not in sys.modules:
     quality_stub.SyntheticDataQualityTracker = SyntheticDataQualityTracker
     sys.modules['python.utils.data.quality'] = quality_stub
 
+if 'python.utils.performance.experiment_logger' not in sys.modules:
+    exp_stub = types.ModuleType('experiment_logger')
+    class ExperimentLogger:
+        def __init__(self, *a, **k):
+            pass
+        def log_metric(self, *a, **k):
+            pass
+        def get_metric_summary(self, *a, **k):
+            return {}
+    exp_stub.ExperimentLogger = ExperimentLogger
+    sys.modules['python.utils.performance.experiment_logger'] = exp_stub
+
+if 'python.utils.performance.performance_tracker' not in sys.modules:
+    tracker_stub = types.ModuleType('performance_tracker')
+    class PerformanceTracker:
+        def __init__(self):
+            self.operations = {}
+        def record_operation(self, *a, **k):
+            pass
+        def get_operation_stats(self, *a, **k):
+            return {}
+    tracker_stub.PerformanceTracker = PerformanceTracker
+    sys.modules['python.utils.performance.performance_tracker'] = tracker_stub
+
 # Helper functions to import modules with graceful skip
 
 def import_module(name: str):
@@ -89,5 +115,99 @@ def test_memory_monitor_snapshot():
     monitor = prof_mod.MemoryMonitor()
     snapshot = monitor.get_memory_snapshot('test')
     assert snapshot.process_memory_gb >= 0
+
+
+def test_text_dataset_loader(tmp_path):
+    dl_mod = import_module('python.utils.data.dataset_loader')
+
+    data_file = tmp_path / 'sample.txt'
+    data_file.write_text('hello\nworld\n')
+
+    cfg = dl_mod.DatasetConfig(name='test', path=str(data_file))
+    loader = dl_mod.UnifiedDatasetLoader()
+    dataset = loader.load_dataset(cfg)
+
+    assert len(dataset) == 2
+    assert dataset[0]['text'] == 'hello'
+
+    with pytest.raises(ImportError):
+        dl_mod.create_simple_dataloader(dataset)
+
+
+def test_preprocessing_pipeline():
+    pre_mod = import_module('python.utils.data.preprocessing')
+    pipeline = pre_mod.create_text_pipeline()
+    processed = pipeline.process('<b>Hello</b> World!')
+    assert 'hello' in processed
+
+
+def test_data_validation():
+    val_mod = import_module('python.utils.data.validation')
+    data = [{'text': 'a'}, {'text': 'a'}, {'text': ''}, {'text': 'b'}]
+    validator = val_mod.DataValidator(val_mod.ValidationConfig(min_samples=1))
+    result = validator.validate_dataset(data)
+    assert result.metrics['total_samples'] == 4
+    assert 'duplicate_count' in result.metrics
+
+
+def test_quality_tracker_analysis():
+    if 'python.utils.data.quality' in sys.modules:
+        del sys.modules['python.utils.data.quality']
+    quality_mod = import_module('python.utils.data.quality')
+    tracker = quality_mod.SyntheticDataQualityTracker()
+    tracker.log_generation_quality({'batch_size': 2},
+                                   {'coherence': 0.8, 'correctness': 0.9})
+    analysis = tracker.analyze_data_quality_trends()
+    assert analysis['total_batches_analyzed'] == 1
+
+
+def test_encryption_hash_and_compare():
+    enc_mod = import_module('python.utils.security.encryption_utils')
+    digest, salt = enc_mod.hash_data('secret')
+    assert isinstance(digest, str)
+    assert enc_mod.secure_compare(digest, digest)
+
+
+def test_config_loader_merge_and_env(tmp_path, monkeypatch):
+    cfg_mod = import_module('python.utils.setup.config_utils')
+    cfg1 = {'a': 1, 'b': {'c': 2}}
+    cfg2 = {'b': {'d': 3}}
+    loader = cfg_mod.ConfigLoader(config_dir=str(tmp_path))
+    merged = loader.merge_configs(cfg1, cfg2)
+    assert merged['b']['c'] == 2 and merged['b']['d'] == 3
+
+    env_file = tmp_path / 'env.yaml'
+    env_file.write_text('value: ${TEST_ENV:42}')
+    monkeypatch.setenv('TEST_ENV', '99')
+    loaded = loader.load_yaml(env_file)
+    assert loaded['value'] == '99'
+
+
+def test_experiment_logger_and_tracker(tmp_path):
+    if 'python.utils.performance.experiment_logger' in sys.modules:
+        del sys.modules['python.utils.performance.experiment_logger']
+    if 'python.utils.performance.performance_tracker' in sys.modules:
+        del sys.modules['python.utils.performance.performance_tracker']
+
+    exp_mod = import_module('python.utils.performance.experiment_logger')
+    tracker_mod = import_module('python.utils.performance.performance_tracker')
+
+    logger = exp_mod.ExperimentLogger('exp', log_dir=str(tmp_path))
+    logger.log_metric('m', 1.0, step=1)
+    summary = logger.get_metric_summary('m')
+    assert summary['count'] == 1
+
+    tracker = tracker_mod.PerformanceTracker()
+    tracker.record_operation('op', 10.0, memory_delta_mb=0)
+    stats = tracker.get_operation_stats('op')
+    assert stats['count'] == 1
+
+
+def test_progress_context():
+    term_mod = import_module('python.utils.logging.terminal_display')
+    with term_mod.progress_context('task', total=2) as progress:
+        progress.advance()
+        progress.advance()
+    assert hasattr(progress, 'advance')
 
 
